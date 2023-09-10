@@ -6,6 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import javax.swing.JButton;
@@ -97,11 +98,13 @@ public class DevolucaoController {
 		                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 		                String valorTotal = formatter.format(alugar.getValorTotal());
 		                String desconto = alugar.getDesconto() == null ? "Sem desconto" : formatter.format(alugar.getDesconto());
-
-		                String message = "Cliente: " + nomePessoa + "\nQuantos dias esteve alugado: "
-		                        + alugar.getQntDiasAluguel() + "\nValor da diária: " + valorTotal
-		                        + "\nVeículo alugado: " + alugar.getVeiculo().getModelo() + "\nValor desconto: "
-		                        + desconto;
+		                String valrTotalSemDesconto = formatter.format(alugar.getValorTotal().add(alugar.getDesconto()));
+		                String message = "Cliente: " + nomePessoa 
+		                				+ "\nVeículo alugado: " + alugar.getVeiculo().getModelo() 
+		                				+ "\nQuantos dias esteve alugado: " + alugar.getQntDiasAluguel()
+		                				+ "\nValor Total: " + valrTotalSemDesconto 
+		                				+ "\nValor desconto: " + desconto
+		                				+ "\nValor Total com Desconto: " + valorTotal;
 		                JOptionPane.showMessageDialog(frame, message);
 		                updateTable();
 		            }
@@ -153,10 +156,13 @@ public class DevolucaoController {
 	}
 
 	private void updateTable() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		tableModel.setRowCount(0);
 		for (Alugar alugar : alugarService.buscarTodos()) {
+			String dataAluguel = dateFormat.format(alugar.getDataAluguel());
+			String entregaPrevista = dateFormat.format(alugar.getEntregaPrevista());
 			Object[] rowData = new Object[] { alugar.getIdentificador(), alugar.getPessoa(), alugar.getVeiculo(),
-					alugar.getDataAluguel(), alugar.getEntregaPrevista() };
+					dataAluguel, entregaPrevista };
 			tableModel.addRow(rowData);
 		}
 	}

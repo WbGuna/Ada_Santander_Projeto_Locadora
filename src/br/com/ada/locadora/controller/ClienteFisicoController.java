@@ -114,9 +114,13 @@ public class ClienteFisicoController {
 
 		JLabel lblBuscaPorNome = new JLabel("Busca por CPF");
 		lblBuscaPorNome.setBounds(55, 300, 100, 14);
-		frame.getContentPane().add(lblBuscaPorNome);
-
-		textFieldBuscaPorNome = new JTextField();
+		frame.getContentPane().add(lblBuscaPorNome);		
+		try {
+			MaskFormatter maskFormatter = new MaskFormatter("###.###.###-##");
+			textFieldBuscaPorNome = new JFormattedTextField(maskFormatter);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		textFieldBuscaPorNome.setBounds(10, 330, 180, 20);
 		frame.getContentPane().add(textFieldBuscaPorNome);
 		textFieldBuscaPorNome.setColumns(10);
