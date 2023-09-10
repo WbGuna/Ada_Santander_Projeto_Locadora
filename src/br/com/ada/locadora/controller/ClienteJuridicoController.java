@@ -51,7 +51,7 @@ public class ClienteJuridicoController {
 		JLabel lblCnpj = new JLabel("CNPJ:");
 		lblCnpj.setBounds(10, 11, 86, 14);
 		frame.getContentPane().add(lblCnpj);
-		
+
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter("###.###.###/###-#");
 			textFieldCnpj = new JFormattedTextField(maskFormatter);
@@ -84,7 +84,7 @@ public class ClienteJuridicoController {
 		JLabel lblNumeroCarteiraFuncionario = new JLabel("Número Carteira Funcionário:");
 		lblNumeroCarteiraFuncionario.setBounds(10, 86, 86, 14);
 		frame.getContentPane().add(lblNumeroCarteiraFuncionario);
-		
+
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter("###.###.###-#");
 			textFieldNumeroCarteiraFuncionario = new JFormattedTextField(maskFormatter);
@@ -121,7 +121,7 @@ public class ClienteJuridicoController {
 
 		JLabel lblBuscaPorNome = new JLabel("Busca por CNPJ");
 		lblBuscaPorNome.setBounds(55, 300, 100, 14);
-		frame.getContentPane().add(lblBuscaPorNome);	
+		frame.getContentPane().add(lblBuscaPorNome);
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter("###.###.###/###-#");
 			textFieldBuscaPorNome = new JFormattedTextField(maskFormatter);
@@ -214,8 +214,13 @@ public class ClienteJuridicoController {
 				int selectedRow = tableClientesJuridicos.getSelectedRow();
 				if (selectedRow != -1) {
 					Integer id = (Integer) tableModel.getValueAt(selectedRow, 0);
-					clienteJuridicoService.deletar(id);
-					updateTable();
+					int dialogResult = JOptionPane.showConfirmDialog(null,
+							"Você tem certeza que deseja excluir este cliente jurídico?", "Aviso",
+							JOptionPane.YES_NO_OPTION);
+					if (dialogResult == JOptionPane.YES_OPTION) {
+						clienteJuridicoService.deletar(id);
+						updateTable();
+					}
 				}
 			}
 		});
@@ -269,7 +274,7 @@ public class ClienteJuridicoController {
 			tableModel.addRow(rowData);
 		}
 	}
-	
+
 	private void showSearchResults(List<ClienteJuridico> clienteJuridico) {
 		JFrame searchResultsFrame = new JFrame("Resultados da busca");
 		searchResultsFrame.setBounds(100, 100, 450, 300);
@@ -294,7 +299,7 @@ public class ClienteJuridicoController {
 
 		for (ClienteJuridico cliente : clienteJuridico) {
 			Object[] rowData = new Object[] { cliente.getIdentificador(), cliente.getCnpj(), cliente.getRazaoSocial(),
-					cliente.getNomeFuncionario(), cliente.getNumeroCarteiraFuncionario()};
+					cliente.getNomeFuncionario(), cliente.getNumeroCarteiraFuncionario() };
 			searchResultsTableModel.addRow(rowData);
 		}
 

@@ -28,7 +28,7 @@ public class VeiculoController {
 	private JTextField textFieldMarca;
 	private JTextField textFieldModelo;
 	private JTextField textFieldAno;
-	private JTextField textFieldKilometragem;	
+	private JTextField textFieldKilometragem;
 	private JComboBox comboBoxTipoVeiculo;
 	private JTable tableVeiculos;
 	private DefaultTableModel tableModel;
@@ -41,7 +41,7 @@ public class VeiculoController {
 		initialize();
 	}
 
-	@SuppressWarnings({ "unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	private void initialize() {
 		frame = new JFrame("Locadora de Veículo Ada");
 		frame.setBounds(100, 100, 750, 500);
@@ -209,8 +209,12 @@ public class VeiculoController {
 				int selectedRow = tableVeiculos.getSelectedRow();
 				if (selectedRow != -1) {
 					Integer id = (Integer) tableModel.getValueAt(selectedRow, 0);
-					veiculoService.deletar(id);
-					updateTable();
+					int dialogResult = JOptionPane.showConfirmDialog(null,
+							"Você tem certeza que deseja excluir este veículo?", "Aviso", JOptionPane.YES_NO_OPTION);
+					if (dialogResult == JOptionPane.YES_OPTION) {
+						veiculoService.deletar(id);
+						updateTable();
+					}
 				}
 			}
 		});

@@ -79,38 +79,42 @@ public class DevolucaoController {
 
 		btnDevolver = new JButton("Devolver");
 		btnDevolver.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        int selectedRow = tableAlugueis.getSelectedRow();
-		        if (selectedRow != -1) {
-		            Integer id = (Integer) tableModel.getValueAt(selectedRow, 0);
-		            String dataEntrega = textFieldDataEntrega.getText();
-		            Alugar alugar = alugarService.devolver(id, dataEntrega);
-		            if (alugar != null) {
-		                Pessoa pessoa = alugar.getPessoa();
-		                String nomePessoa;
-		                if (pessoa instanceof ClienteFisico) {
-		                    nomePessoa = ((ClienteFisico) pessoa).getNome();
-		                } else if (pessoa instanceof ClienteJuridico) {
-		                    nomePessoa = ((ClienteJuridico) pessoa).getRazaoSocial();
-		                } else {
-		                    nomePessoa = "Desconhecido";
-		                }
-		                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-		                String valorTotal = formatter.format(alugar.getValorTotal());
-		                String desconto = alugar.getDesconto() == null ? "Sem desconto" : formatter.format(alugar.getDesconto());
-		                String valrTotalSemDesconto = formatter.format(alugar.getValorTotal().add(alugar.getDesconto()));
-		                String message = "Cliente: " + nomePessoa 
-		                				+ "\nVeículo alugado: " + alugar.getVeiculo().getModelo() 
-		                				+ "\nQuantos dias esteve alugado: " + alugar.getQntDiasAluguel()
-		                				+ "\nValor Total: " + valrTotalSemDesconto 
-		                				+ "\nValor desconto: " + desconto
-		                				+ "\nValor Total com Desconto: " + valorTotal;
-		                JOptionPane.showMessageDialog(frame, message);
-		                updateTable();
-		            }
-		        }
-		    }
-		});;
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = tableAlugueis.getSelectedRow();
+				if (selectedRow != -1) {
+					Integer id = (Integer) tableModel.getValueAt(selectedRow, 0);
+					String dataEntrega = textFieldDataEntrega.getText();
+					int dialogResult = JOptionPane.showConfirmDialog(null,
+							"Você tem certeza que deseja devolver este aluguel?", "Aviso", JOptionPane.YES_NO_OPTION);
+					if (dialogResult == JOptionPane.YES_OPTION) {
+						Alugar alugar = alugarService.devolver(id, dataEntrega);
+						if (alugar != null) {
+							Pessoa pessoa = alugar.getPessoa();
+							String nomePessoa;
+							if (pessoa instanceof ClienteFisico) {
+								nomePessoa = ((ClienteFisico) pessoa).getNome();
+							} else if (pessoa instanceof ClienteJuridico) {
+								nomePessoa = ((ClienteJuridico) pessoa).getRazaoSocial();
+							} else {
+								nomePessoa = "Desconhecido";
+							}
+							NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+							String valorTotal = formatter.format(alugar.getValorTotal());
+							String desconto = alugar.getDesconto() == null ? "Sem desconto"
+									: formatter.format(alugar.getDesconto());
+							String valrTotalSemDesconto = formatter
+									.format(alugar.getValorTotal().add(alugar.getDesconto()));
+							String message = "Cliente: " + nomePessoa + "\nVeículo alugado: "
+									+ alugar.getVeiculo().getModelo() + "\nQuantos dias esteve alugado: "
+									+ alugar.getQntDiasAluguel() + "\nValor Total: " + valrTotalSemDesconto
+									+ "\nValor desconto: " + desconto + "\nValor Total com Desconto: " + valorTotal;
+							JOptionPane.showMessageDialog(frame, message);
+							updateTable();
+						}
+					}
+				}
+			}
+		});
 		btnDevolver.setBounds(10, 36, 89, 23);
 		btnDevolver.setVisible(false);
 		frame.getContentPane().add(btnDevolver);

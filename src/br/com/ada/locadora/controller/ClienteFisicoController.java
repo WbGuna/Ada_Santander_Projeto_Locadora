@@ -114,7 +114,7 @@ public class ClienteFisicoController {
 
 		JLabel lblBuscaPorNome = new JLabel("Busca por CPF");
 		lblBuscaPorNome.setBounds(55, 300, 100, 14);
-		frame.getContentPane().add(lblBuscaPorNome);		
+		frame.getContentPane().add(lblBuscaPorNome);
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter("###.###.###-##");
 			textFieldBuscaPorNome = new JFormattedTextField(maskFormatter);
@@ -207,8 +207,13 @@ public class ClienteFisicoController {
 				int selectedRow = tableClientesFisicos.getSelectedRow();
 				if (selectedRow != -1) {
 					Integer id = (Integer) tableModel.getValueAt(selectedRow, 0);
-					clienteFisicoService.deletar(id);
-					updateTable();
+					int dialogResult = JOptionPane.showConfirmDialog(null,
+							"Você tem certeza que deseja excluir este cliente físico?", "Aviso",
+							JOptionPane.YES_NO_OPTION);
+					if (dialogResult == JOptionPane.YES_OPTION) {
+						clienteFisicoService.deletar(id);
+						updateTable();
+					}
 				}
 			}
 		});
