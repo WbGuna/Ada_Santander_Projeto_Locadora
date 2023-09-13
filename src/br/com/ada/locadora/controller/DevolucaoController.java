@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -100,14 +101,20 @@ public class DevolucaoController {
 							}
 							NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 							String valorTotal = formatter.format(alugar.getValorTotal());
-							String desconto = alugar.getDesconto() == null ? "Sem desconto"
-									: formatter.format(alugar.getDesconto());
-							String valrTotalSemDesconto = formatter
-									.format(alugar.getValorTotal().add(alugar.getDesconto()));
-							String message = "Cliente: " + nomePessoa + "\nVeículo alugado: "
-									+ alugar.getVeiculo().getModelo() + "\nQuantos dias esteve alugado: "
-									+ alugar.getQntDiasAluguel() + "\nValor Total: " + valrTotalSemDesconto
-									+ "\nValor desconto: " + desconto + "\nValor Total com Desconto: " + valorTotal;
+							String desconto = "";
+			                if(alugar.getDesconto() == null) {
+			                	alugar.setDesconto(BigDecimal.ZERO);
+			                	desconto = formatter.format(alugar.getDesconto());
+			                } else {
+			                	desconto = formatter.format(alugar.getDesconto());
+			                }
+							String valrTotalSemDesconto = formatter.format(alugar.getValorTotal().add(alugar.getDesconto()));
+							String message = "Cliente: " + nomePessoa + 
+									       "\nVeículo alugado: " + alugar.getVeiculo().getModelo() + 
+									       "\nQuantos dias esteve alugado: " + alugar.getQntDiasAluguel() + 
+									       "\nValor Total: " + valrTotalSemDesconto + 
+									       "\nValor desconto: " + desconto + 
+									       "\nValor Total com Desconto: " + valorTotal;
 							JOptionPane.showMessageDialog(frame, message);
 							updateTable();
 						}
